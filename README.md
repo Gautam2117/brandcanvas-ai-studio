@@ -1,147 +1,99 @@
 # BrandCanvas AI
+Guideline-aware creative studio for Tesco Retail Media.
 
-BrandCanvas AI is a guideline-aware creative builder for Tesco Retail Media. It helps advertisers (especially small and mid-sized suppliers) create clean, compliant, multi-format social creatives faster, with live checks that prevent rejections.
+BrandCanvas AI is a prototype web app that helps a non-designer go from a simple brief and a packshot to a professional-looking social creative, while checking key retailer and brand rules in real time. The point of the prototype is to reduce back-and-forth, reduce rejections, and make it faster for smaller suppliers to produce compliant assets without relying on an agency for every variation.
 
-## What problem this solves
-
-Retail media creatives often fail for simple reasons:
-- Elements placed outside safe zones
-- Missing required disclaimers for regulated categories (example: alcohol)
-- Text too small to be readable
-- Low contrast text that hurts readability
-
-These issues cause back-and-forth, delays, and wasted budget. BrandCanvas AI makes those issues visible early and helps fix them in one click.
-
-## What this prototype does
-
-In the Studio you can:
-- Upload a packshot and remove the background via an API endpoint
-- Drag, resize, and rotate elements on a canvas
-- Switch between three formats:
+## What this prototype demonstrates
+- Visual creative editor (drag, resize, rotate) built around a simple canvas workflow
+- Packshot upload with background removal (via a small remove-bg API)
+- Multi-format creative support from one design:
   - 1:1 (1080x1080)
   - 9:16 (1080x1920)
   - 1.91:1 (1200x628)
-- See real-time Guideline Guardian results:
-  - PASS, WARN, FAIL with an issues list
-- Click an issue to jump to the problematic layer
-- Use one-click fixes:
-  - Auto-fit safe zone
-  - Add disclaimer
-  - Fix minimum font size
-  - Fix contrast
-- Export JPEG or PNG for all three formats under 500 KB
+- Guideline Guardian, a live validator with clear PASS / WARN / FAIL feedback
+- One-click fixes that turn common issues into a guided flow
+- Export to JPEG/PNG under 500 KB for each format (prototype goal for campaign constraints)
 
-## Demo flow (2 to 4 minutes)
+## Guideline Guardian checks included
+This prototype focuses on a few high-signal checks that are easy for judges and stakeholders to verify quickly:
+- Safe zone compliance: highlights a safe area and flags any element that goes outside it
+- Minimum font size: warns or fails if text is too small
+- Contrast: warns if text readability is likely to be poor
+- Alcohol disclaimer: if the creative is marked as alcohol-related, a disclaimer is required
 
-Use this as your judge-ready walkthrough:
-- 0:00 to 0:20
-  - Open the Studio
-  - Click "Load Demo FAIL"
-  - Point to Guardian status = FAIL and the issues list
-- 0:20 to 1:10
-  - Click OUTSIDE_SAFE_ZONE (it selects the layer)
-  - Click "Auto-fit safe zone"
-  - Status improves, but may still FAIL if disclaimer is missing
-- 1:10 to 1:40
-  - Toggle "Alcohol product" ON (if not already)
-  - Guardian shows MISSING_DISCLAIMER
-  - Click the issue to auto-add the disclaimer
-- 1:40 to 2:10
-  - If you see a WARN for font size, click "Fix min font"
-  - Show PASS
-- 2:10 to 3:00
-  - Click "Export JPEG (3 sizes)"
-  - Show the size results are under 500 KB
-  - Mention it exports all formats from one design
+These checks are implemented as a small policy module so rules are easy to extend later.
 
-## Project structure
+## Demo flow for judges (2 to 4 minutes)
+This is the loop the prototype is designed to showcase:
 
-This repo is a pnpm workspace (monorepo):
-- apps/web
-  - Next.js app with the Studio UI (React + Konva)
-- apps/api (or similar)
-  - Background removal endpoint used by the Studio
-- packages/policy
-  - Guideline Guardian rule helpers and evaluation logic
+1) Open Studio and click **Load Demo FAIL**
+- Guardian status shows FAIL
+- Issues list is populated
 
-If your folder names differ, update this section to match your repo.
+2) Fix safe zone
+- Click the **OUTSIDE_SAFE_ZONE** issue to auto-select the problematic layer
+- Click **Auto-fit safe zone**
+- Status improves
 
-## Tech used
+3) Fix missing disclaimer (alcohol flow)
+- Toggle **Alcohol product** ON (if not already)
+- Guardian shows **MISSING_DISCLAIMER**
+- Click the issue to auto-add the disclaimer
+- Status moves toward WARN or PASS
 
-- Next.js (App Router)
-- React
-- Tailwind CSS
-- Konva + react-konva (canvas editing)
-- pnpm workspaces
-- Node.js for the web app
-- Python service for background removal (prototype endpoint)
+4) Fix minimum font
+- Click **Fix min font**
+- Status becomes PASS
 
-## Setup
+5) Export proof
+- Click **Export JPEG (3 sizes)**
+- Show the exported file sizes are under 500 KB
+- Mention that all three formats are exported from one design
 
-### Prerequisites
-- Node.js 18+ (recommended)
+## Tech stack
+- Web: Next.js (App Router) + React + Tailwind CSS
+- Canvas editing: react-konva + Konva
+- Monorepo: pnpm workspaces (apps/*, packages/*)
+- Policy engine: a local workspace package used by the web app
+- Background removal: lightweight HTTP endpoint used by the packshot upload flow
+
+## Local setup
+Prerequisites:
+- Node.js 18+ recommended
 - pnpm 9+
-- Python 3.10+ (if you are running the background removal service)
 
-### Install dependencies (from repo root)
+Install dependencies from the repo root:
 ```bash
 pnpm install
 ```
 
-### Run the web app
+Run the project (monorepo):
 ```bash
-pnpm -C apps/web dev
+pnpm dev
 ```
 
-The Studio will be available at:
-- http://localhost:3000
+Background removal service:
+- The Studio expects a remove-bg endpoint available at:
+  - http://localhost:8000/remove-bg
+- Start the remove-bg server provided in this repo (see the backend folder/service in the codebase).
 
-### Run the background removal API
+Open the app:
+- Visit the Studio route in your browser (for example /studio).
+- Upload a packshot and test the Guardian checks and export flow.
 
-The Studio expects a local endpoint:
-- http://localhost:8000/remove-bg
+## Project scope and what is intentionally minimal
+This is a hackathon prototype optimized for judging:
+- The editor supports the core operations needed for a clean demo: place assets, edit text, validate, fix, export.
+- The policy rules are a starting set that can be expanded into a fuller guideline system.
+- The goal is to prove the workflow end-to-end rather than cover every possible retail guideline in the first version.
 
-If you already have the API wired up, run it from its app folder. Example:
-```bash
-pnpm -C apps/api dev
-```
+## Roadmap after the campaign
+If extended beyond the hackathon, the next steps are clear:
+- Policy dashboard so Tesco can update rules without code changes
+- More guideline coverage (logo placement, mandatory tiles, spacing rules, channel-specific constraints)
+- Collaborative review (comments, approvals, version history)
+- Template recommendations based on past high-performing creatives
+- More output formats beyond social, including onsite and in-store placements
 
-If your API is Python-based, run it using your existing command (FastAPI, Flask, etc.).
-
-## Notes on exports under 500 KB
-
-The export step should:
-- Render each format at the correct dimensions
-- Encode to JPEG or PNG
-- Reduce quality (and if needed downscale slightly) until each file is under 500 KB
-
-If you change export logic, keep the size printout visible so judges can verify quickly.
-
-## Troubleshooting
-
-- Cannot find module "@brandcanvas/policy"
-  - Confirm the package exists under packages/policy
-  - From repo root run:
-    - pnpm install
-  - In apps/web/next.config.ts ensure:
-    - experimental.externalDir = true
-    - transpilePackages includes "@brandcanvas/policy"
-  - Restart the dev server after changes
-
-- Background removal fails
-  - Confirm the API is running on port 8000
-  - Confirm the route is POST /remove-bg and returns an image blob
-  - For local development, CORS may be needed depending on your setup
-
-## What I would build next
-
-If continued after the hackathon:
-- A policy dashboard for Tesco teams to edit rules without code changes
-- Collaboration: comments, approvals, version history
-- One-brief to full creative set generation
-- Performance-informed layout suggestions using campaign signals
-- More formats beyond social, including in-store and on-site placements
-
-## License
-
-This is a hackathon prototype. Add a license if you plan to open-source it.
+## About the author
+Built as a solo project by Gautam Govind for the Tesco Retail Media InnovAItion Jam prototype phase.
