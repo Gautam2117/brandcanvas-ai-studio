@@ -1,0 +1,49 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.turbo/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Caches
+.cache/
+.eslintcache
+*.tsbuildinfo
+
+# Local assets / uploads (optional)
+uploads/
+tmp/
+
+# Zip exports / large files
+*.zip
+*.7z
+*.tar
+*.gz
+
+# Python (if you have backend services)
+__pycache__/
+*.pyc
+.venv/
+venv/

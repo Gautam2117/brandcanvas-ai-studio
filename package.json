@@ -1,0 +1,11 @@
+{
+  "name": "brandcanvas-ai",
+  "private": true,
+  "packageManager": "pnpm@9",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "pnpm -r dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint"
+  }
+}

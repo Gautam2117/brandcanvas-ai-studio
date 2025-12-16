@@ -1,0 +1,13 @@
+export const POLICY = {
+  formats: {
+    SQUARE_1_1: { w: 1080, h: 1080, safeMargin: 80 },
+    STORY_9_16: { w: 1080, h: 1920, safeMargin: 120 },
+    LANDSCAPE_1_91_1: { w: 1200, h: 628, safeMargin: 60 },
+  },
+  rules: {
+    minFontPx: 24,
+    minContrastRatio: 3.0,
+    requireDisclaimerIfAlcohol: true,
+    alcoholDisclaimerText: "Drinkaware.co.uk",
+  },
+} as const;
