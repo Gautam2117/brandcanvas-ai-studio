@@ -237,7 +237,8 @@ export default function StudioPage() {
     fd.append("file", file);
 
     // Keep your current endpoint. Make sure your backend is running.
-    const res = await fetch("http://localhost:8000/remove-bg", { method: "POST", body: fd });
+    const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000";
+    const res = await fetch(`${API_BASE}/remove-bg`, { method: "POST", body: fd });
 
     if (!res.ok) {
       const text = await res.text().catch(() => "");
